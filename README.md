@@ -41,7 +41,6 @@ Image: crazymax/msmtpd:latest
    - linux/arm64
    - linux/386
    - linux/ppc64le
-   - linux/s390x
 ```
 
 ### Environment variables
