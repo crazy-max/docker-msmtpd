@@ -49,8 +49,8 @@ Image: crazymax/msmtpd:latest
 * `TZ`: Timezone assigned to the container (default `UTC`)
 * `PUID`: Daemon user id (default `1000`)
 * `PGID`: Daemon group id (default `1000`)
-* `SMTP_HOST`: The SMTP realy server to send the mail to. **required**
-* `SMTP_PORT`: The port that the SMTP relay server listens on. Default `25`, unless TLS without STARTTLS is used, in which case it is `465`.
+* `SMTP_HOST`: SMTP relay server to send the mail to. **required**
+* `SMTP_PORT`: Port that the SMTP relay server listens on. Default `25`, unless TLS without STARTTLS is used, in which case it's `465`.
 * `SMTP_TLS`: Enable or disable TLS (also known as SSL) for secured connections (`on` or `off`).
 * `SMTP_STARTTLS`: Choose the TLS variant: start TLS from within the session (`on`, default), or tunnel the session through TLS (`off`).
 * `SMTP_TLS_CHECKCERT`: Enable or disable checks of the server certificate (`on` or `off`). They are enabled by default.
