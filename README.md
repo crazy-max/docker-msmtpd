@@ -49,9 +49,9 @@ Image: crazymax/msmtpd:latest
 * `PUID`: Daemon user id (default `1000`)
 * `PGID`: Daemon group id (default `1000`)
 * `SMTP_HOST`: SMTP relay server to send the mail to. **required**
-* `SMTP_PORT`: Port that the SMTP relay server listens on. Default `25`, unless TLS without STARTTLS is used, in which case it's `465`.
+* `SMTP_PORT`: Port that the SMTP relay server listens on. Default `25` or `465` if TLS.
 * `SMTP_TLS`: Enable or disable TLS (also known as SSL) for secured connections (`on` or `off`).
-* `SMTP_STARTTLS`: Choose the TLS variant: start TLS from within the session (`on`, default), or tunnel the session through TLS (`off`).
+* `SMTP_STARTTLS`: Start TLS from within the session (`on`, default), or tunnel the session through TLS (`off`).
 * `SMTP_TLS_CHECKCERT`: Enable or disable checks of the server certificate (`on` or `off`). They are enabled by default.
 * `SMTP_AUTH`: Enable or disable authentication and optionally [choose a method](https://marlam.de/msmtp/msmtp.html#Authentication-commands) to use. The argument `on` chooses a method automatically.
 * `SMTP_USER`: Set the user name for authentication. Authentication must be activated with the `SMTP_AUTH` env var.
@@ -59,9 +59,9 @@ Image: crazymax/msmtpd:latest
 * `SMTP_DOMAIN`: Argument of the `SMTP EHLO` command. Default is `localhost`.
 * `SMTP_FROM`: Set the envelope-from address. Supported substitution patterns can be found [here](https://marlam.de/msmtp/msmtp.html#Commands-specific-to-sendmail-mode).
 
-> More info: https://marlam.de/msmtp/msmtp.html
+> 💡 `SMTP_USER_FILE` and `SMTP_PASSWORD_FILE` can be used to fill in the value from a file, especially for Docker's secrets feature.
 
-> `SMTP_USER_FILE` and `SMTP_PASSWORD_FILE` can be used to fill in the value from a file, especially for Docker's secrets feature.
+> 💡 More info: https://marlam.de/msmtp/msmtp.html
 
 ### Ports
 
