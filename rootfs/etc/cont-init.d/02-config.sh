@@ -11,6 +11,7 @@ TZ=${TZ:-UTC}
 #SMTP_USER=${SMTP_USER:-foo}
 #SMTP_PASSWORD=${SMTP_PASSWORD:-bar}
 #SMTP_FROM=${SMTP_FROM:-foo@example.com}
+#SMTP_DOMAIN=${SMTP_DOMAIN:-example.com}
 
 # From https://github.com/docker-library/mariadb/blob/master/docker-entrypoint.sh#L21-L41
 # usage: file_env VAR [DEFAULT]
@@ -62,5 +63,6 @@ if [ -n "$SMTP_AUTH" ];           then echo "auth $SMTP_AUTH" >> /etc/msmtprc; f
 if [ -n "$SMTP_USER" ];           then echo "user $SMTP_USER" >> /etc/msmtprc; fi
 if [ -n "$SMTP_PASSWORD" ];       then echo "password $SMTP_PASSWORD" >> /etc/msmtprc; fi
 if [ -n "$SMTP_FROM" ];           then echo "from $SMTP_FROM" >> /etc/msmtprc; fi
+if [ -n "$SMTP_DOMAIN" ];         then echo "domain $SMTP_DOMAIN" >> /etc/msmtprc; fi
 unset SMTP_USER
 unset SMTP_PASSWORD

@@ -21,6 +21,7 @@ services:
       - "SMTP_USER_FILE=/run/secrets/smtp_user"
       - "SMTP_PASSWORD_FILE=/run/secrets/smtp_password"
       - "SMTP_FROM=foo@gmail.com"
+      - "SMTP_DOMAIN=localhost"
     secrets:
       - smtp_user
       - smtp_password
