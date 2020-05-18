@@ -1,0 +1,24 @@
+version: "3.5"
+
+services:
+  msmtpd:
+    image: crazymax/msmtpd
+    container_name: msmtpd
+    ports:
+      - target: 2500
+        published: 2500
+        protocol: tcp
+    environment:
+      - "TZ=Europe/Paris"
+      - "PUID=1500"
+      - "PGID=1500"
+      - "SMTP_HOST=smtp.gmail.com"
+      - "SMTP_PORT=587"
+      - "SMTP_TLS=on"
+      - "SMTP_STARTTLS=on"
+      - "SMTP_TLS_CHECKCERT=on"
+      - "SMTP_AUTH=on"
+      - "SMTP_USER=foo"
+      - "SMTP_PASSWORD=bar"
+      - "SMTP_FROM=foo@gmail.com"
+    restart: always
