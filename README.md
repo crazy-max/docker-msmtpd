@@ -88,7 +88,7 @@ $ docker run -d -p 2500:2500 --name msmtpd \
   crazymax/msmtpd
 ```
 
-## Update
+## Upgrade
 
 Recreate the container whenever I push an update:
 
