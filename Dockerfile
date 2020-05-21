@@ -59,10 +59,6 @@ LABEL maintainer="CrazyMax" \
   org.opencontainers.image.description="Lightweight SMTP relay using msmtpd" \
   org.opencontainers.image.licenses="MIT"
 
-ENV TZ="UTC" \
-  PUID="1500" \
-  PGID="1500"
-
 RUN S6_ARCH=$(case ${TARGETPLATFORM:-linux/amd64} in \
     "linux/amd64")   echo "amd64"   ;; \
     "linux/arm/v6")  echo "arm"     ;; \
@@ -72,9 +68,14 @@ RUN S6_ARCH=$(case ${TARGETPLATFORM:-linux/amd64} in \
     "linux/ppc64le") echo "ppc64le" ;; \
     *)               echo ""        ;; esac) \
   && echo "S6_ARCH=$S6_ARCH" \
-  && wget -q "https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-${S6_ARCH}.tar.gz" -qO "/tmp/s6-overlay.tar.gz" \
-  && tar xzf /tmp/s6-overlay.tar.gz -C / \
+  && wget -q "https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-${S6_ARCH}.tar.gz" -qO "/tmp/s6-overlay-${S6_ARCH}.tar.gz" \
+  && tar xzf /tmp/s6-overlay-${S6_ARCH}.tar.gz -C / \
   && s6-echo "s6-overlay installed"
+
+ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2" \
+  TZ="UTC" \
+  PUID="1500" \
+  PGID="1500"
 
 COPY --from=builder /usr/bin/msmtp* /usr/bin/
 COPY rootfs /
