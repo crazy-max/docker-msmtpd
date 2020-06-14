@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:experimental
 FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:3.11 as builder
 
 ARG TARGETPLATFORM
@@ -38,7 +37,6 @@ RUN curl -sSL "https://marlam.de/msmtp/releases/msmtp-$MSMTP_VERSION.tar.xz" | t
   && make install \
   && msmtp --version
 
-# syntax=docker/dockerfile:experimental
 FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:3.11
 
 ARG TARGETPLATFORM
