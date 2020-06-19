@@ -78,6 +78,14 @@ docker-compose up -d
 docker-compose logs -f
 ```
 
+### Kubernetes
+
+To install on a Kubernetes cluster, you can use the following [kubernetes deployment template](examples/kubernetes/deployment.yaml), then create the deployment:
+
+```bash
+kubectl apply -f deployment.yaml
+```
+
 ### Command line
 
 You can also use the following minimal command:
