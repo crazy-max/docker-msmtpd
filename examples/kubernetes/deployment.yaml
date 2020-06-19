@@ -1,0 +1,95 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: msmtpd
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: msmtpd-config
+    namespace: msmtpd
+data:
+    smtp_user: |
+      foo@gmail.com
+    smtp_password: |
+      gmailpassword
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+    name: msmtpd
+    namespace: msmtpd
+    labels:
+        app: msmtpd
+spec:
+    serviceName: msmtpd
+    replicas: 1
+    selector:
+        matchLabels:
+            app: msmtpd
+    template:
+        metadata:
+            labels:
+                app: msmtpd
+                name: msmtpd
+        spec:
+            containers:
+            - name: msmtpd
+              image: crazymax/msmtpd
+              imagePullPolicy: IfNotPresent
+              env:
+              - name: TZ
+                value: Europe/Paris
+              - name: PUID
+                value: "1500"
+              - name: PGID
+                value: "1500"
+              - name: SMTP_HOST
+                value: "smtp.gmail.com"
+              - name: SMTP_PORT
+                value: "587"
+              - name: SMTP_TLS
+                value: "on"
+              - name: SMTP_STARTTLS
+                value: "on"
+              - name: SMTP_TLS_CHECKCERT
+                value: "on"
+              - name: SMTP_AUTH
+                value: "on"
+              - name: SMTP_USER_FILE
+                value: "/run/secrets/smtp_user"
+              - name: SMTP_PASSWORD_FILE
+                value: "/run/secrets/smtp_password"
+              - name: SMTP_FROM
+                value: "foo@gmail.com"
+              - name: SMTP_DOMAIN
+                value: "localhost"
+              volumeMounts:
+                - name: msmtpd-config-user
+                  mountPath: /run/secrets/smtp_user
+                  subPath: smtp_user
+                - name: msmtpd-config-password
+                  mountPath: /run/secrets/smtp_password
+                  subPath: smtp_password
+            volumes:
+              - name: msmtpd-config-user
+                configMap:
+                    name: msmtpd-config
+              - name: msmtpd-config-password
+                configMap:
+                    name: msmtpd-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: smtp
+    namespace: msmtpd
+spec:
+    selector:
+        app: msmtpd
+    ports:
+    - port: 25
+      targetPort: 2500
+      protocol: TCP
+      name: smtp
