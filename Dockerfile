@@ -1,4 +1,4 @@
-FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:3.11 as builder
+FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:3.12 as builder
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
@@ -37,7 +37,7 @@ RUN curl -sSL "https://marlam.de/msmtp/releases/msmtp-$MSMTP_VERSION.tar.xz" | t
   && make install \
   && msmtp --version
 
-FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:3.11
+FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:3.12
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
