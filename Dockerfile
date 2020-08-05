@@ -24,7 +24,7 @@ RUN apk --update --no-cache add \
     tar \
   && rm -rf /tmp/*
 
-ENV MSMTP_VERSION="1.8.10"
+ENV MSMTP_VERSION="1.8.11"
 
 WORKDIR /tmp/msmtp
 RUN curl -sSL "https://marlam.de/msmtp/releases/msmtp-$MSMTP_VERSION.tar.xz" | tar xJv --strip 1 \
