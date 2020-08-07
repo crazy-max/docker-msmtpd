@@ -1,4 +1,4 @@
-FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:3.12 as builder
+FROM --platform=${TARGETPLATFORM:-linux/amd64} crazymax/alpine-s6:3.12 as builder
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
@@ -37,10 +37,7 @@ RUN curl -sSL "https://marlam.de/msmtp/releases/msmtp-$MSMTP_VERSION.tar.xz" | t
   && make install \
   && msmtp --version
 
-FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:3.12
-
-ARG TARGETPLATFORM
-ARG BUILDPLATFORM
+FROM --platform=${TARGETPLATFORM:-linux/amd64} crazymax/alpine-s6:3.12
 
 ARG BUILD_DATE
 ARG VCS_REF
@@ -56,19 +53,6 @@ LABEL maintainer="CrazyMax" \
   org.opencontainers.image.title="msmtp" \
   org.opencontainers.image.description="Lightweight SMTP relay using msmtpd" \
   org.opencontainers.image.licenses="MIT"
-
-RUN S6_ARCH=$(case ${TARGETPLATFORM:-linux/amd64} in \
-    "linux/amd64")   echo "amd64"   ;; \
-    "linux/arm/v6")  echo "arm"     ;; \
-    "linux/arm/v7")  echo "armhf"   ;; \
-    "linux/arm64")   echo "aarch64" ;; \
-    "linux/386")     echo "x86"     ;; \
-    "linux/ppc64le") echo "ppc64le" ;; \
-    *)               echo ""        ;; esac) \
-  && echo "S6_ARCH=$S6_ARCH" \
-  && wget -q "https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-${S6_ARCH}.tar.gz" -qO "/tmp/s6-overlay-${S6_ARCH}.tar.gz" \
-  && tar xzf /tmp/s6-overlay-${S6_ARCH}.tar.gz -C / \
-  && s6-echo "s6-overlay installed"
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2" \
   TZ="UTC" \
