@@ -16,6 +16,21 @@ If you are interested, [check out](https://hub.docker.com/r/crazymax/) my other 
 
 💡 Want to be notified of new releases? Check out 🔔 [Diun (Docker Image Update Notifier)](https://github.com/crazy-max/diun) project!
 
+___
+
+* [Features](#features)
+* [Docker](#docker)
+  * [Image](#image)
+  * [Environment variables](#environment-variables)
+  * [Ports](#ports)
+* [Usage](#usage)
+  * [Docker Compose](#docker-compose)
+  * [Kubernetes](#kubernetes)
+  * [Command line](#command-line)
+* [Upgrade](#upgrade)
+* [How can I help?](#how-can-i-help)
+* [License](#license)
+
 ## Features
 
 * Run as non-root user
@@ -25,7 +40,12 @@ If you are interested, [check out](https://hub.docker.com/r/crazymax/) my other 
 
 ## Docker
 
-### Multi-platform image
+### Image
+
+| Registry                                                                                         | Image                           |
+|--------------------------------------------------------------------------------------------------|---------------------------------|
+| [Docker Hub](https://hub.docker.com/r/crazymax/msmtpd/)                                            | `crazymax/msmtpd`                 |
+| [GitHub Container Registry](https://github.com/users/crazy-max/packages/container/package/msmtpd)  | `ghcr.io/crazy-max/msmtpd`        |
 
 Following platforms for this image are available:
 
@@ -71,7 +91,8 @@ Image: crazymax/msmtpd:latest
 
 ### Docker Compose
 
-Docker compose is the recommended way to run this image. You can use the following [docker compose template](examples/compose/docker-compose.yml), then run the container:
+Docker compose is the recommended way to run this image. You can use the following
+[docker compose template](examples/compose/docker-compose.yml), then run the container:
 
 ```bash
 docker-compose up -d
@@ -80,7 +101,8 @@ docker-compose logs -f
 
 ### Kubernetes
 
-To install on a Kubernetes cluster, you can use the following [kubernetes deployment template](examples/kubernetes/deployment.yaml), then create the deployment:
+To install on a Kubernetes cluster, you can use the following
+[kubernetes deployment template](examples/kubernetes/deployment.yaml), then create the deployment:
 
 ```bash
 kubectl apply -f deployment.yaml
@@ -107,7 +129,10 @@ docker-compose up -d
 
 ## How can I help?
 
-All kinds of contributions are welcome :raised_hands:! The most basic way to show your support is to star :star2: the project, or to raise issues :speech_balloon: You can also support this project by [**becoming a sponsor on GitHub**](https://github.com/sponsors/crazy-max) :clap: or by making a [Paypal donation](https://www.paypal.me/crazyws) to ensure this journey continues indefinitely! :rocket:
+All kinds of contributions are welcome :raised_hands:! The most basic way to show your support is to star :star2:
+the project, or to raise issues :speech_balloon: You can also support this project by
+[**becoming a sponsor on GitHub**](https://github.com/sponsors/crazy-max) :clap: or by making
+a [Paypal donation](https://www.paypal.me/crazyws) to ensure this journey continues indefinitely! :rocket:
 
 Thanks again for your support, it is much appreciated! :pray:
 
