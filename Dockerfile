@@ -1,9 +1,5 @@
 FROM --platform=${TARGETPLATFORM:-linux/amd64} crazymax/alpine-s6:3.12 as builder
 
-ARG TARGETPLATFORM
-ARG BUILDPLATFORM
-RUN printf "I am running on ${BUILDPLATFORM:-linux/amd64}, building for ${TARGETPLATFORM:-linux/amd64}\n$(uname -a)\n"
-
 RUN apk --update --no-cache add \
     autoconf \
     automake \
@@ -20,7 +16,7 @@ RUN apk --update --no-cache add \
     tar \
   && rm -rf /tmp/*
 
-ENV MSMTP_VERSION="1.8.11"
+ENV MSMTP_VERSION="1.8.14"
 
 WORKDIR /tmp/msmtp
 RUN curl -sSL "https://marlam.de/msmtp/releases/msmtp-$MSMTP_VERSION.tar.xz" | tar xJv --strip 1 \
@@ -33,6 +29,7 @@ RUN curl -sSL "https://marlam.de/msmtp/releases/msmtp-$MSMTP_VERSION.tar.xz" | t
   && make install \
   && msmtp --version
 
+ARG TARGETPLATFORM
 FROM --platform=${TARGETPLATFORM:-linux/amd64} crazymax/alpine-s6:3.12
 
 LABEL maintainer="CrazyMax"

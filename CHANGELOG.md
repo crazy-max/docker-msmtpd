@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.8.14-RC1 (2020/12/25)
+
+* msmtp 1.8.14
+* Do not fail on permission issue (#21)
+
 ## 1.8.11-RC1 (2020/08/07)
 
 * msmtp 1.8.11
