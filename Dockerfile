@@ -7,7 +7,7 @@ ARG MSMTP_VERSION
 WORKDIR /dist/msmtp
 RUN curl -sSL "https://marlam.de/msmtp/releases/msmtp-$MSMTP_VERSION.tar.xz" | tar xJv --strip 1
 
-FROM --platform=${TARGETPLATFORM:-linux/amd64} crazymax/alpine-s6:3.12-2.1.0.2 AS builder
+FROM crazymax/alpine-s6:3.12-2.1.0.2 AS builder
 RUN apk --update --no-cache add \
     autoconf \
     automake \
@@ -32,8 +32,7 @@ RUN ./configure \
   && make install \
   && msmtp --version
 
-ARG TARGETPLATFORM
-FROM --platform=${TARGETPLATFORM:-linux/amd64} crazymax/alpine-s6:3.12-2.1.0.2
+FROM crazymax/alpine-s6:3.12-2.1.0.2
 LABEL maintainer="CrazyMax"
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2" \
