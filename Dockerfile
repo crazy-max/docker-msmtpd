@@ -1,4 +1,6 @@
-FROM --platform=${TARGETPLATFORM:-linux/amd64} crazymax/alpine-s6:3.12 as builder
+ARG MSMTP_VERSION=1.8.14
+
+FROM --platform=${TARGETPLATFORM:-linux/amd64} crazymax/alpine-s6:3.12-2.1.0.2 AS builder
 
 RUN apk --update --no-cache add \
     autoconf \
@@ -16,9 +18,8 @@ RUN apk --update --no-cache add \
     tar \
   && rm -rf /tmp/*
 
-ENV MSMTP_VERSION="1.8.14"
-
 WORKDIR /tmp/msmtp
+ARG MSMTP_VERSION
 RUN curl -sSL "https://marlam.de/msmtp/releases/msmtp-$MSMTP_VERSION.tar.xz" | tar xJv --strip 1 \
   && ./configure \
     --prefix=/usr \
@@ -30,8 +31,7 @@ RUN curl -sSL "https://marlam.de/msmtp/releases/msmtp-$MSMTP_VERSION.tar.xz" | t
   && msmtp --version
 
 ARG TARGETPLATFORM
-FROM --platform=${TARGETPLATFORM:-linux/amd64} crazymax/alpine-s6:3.12
-
+FROM --platform=${TARGETPLATFORM:-linux/amd64} crazymax/alpine-s6:3.12-2.1.0.2
 LABEL maintainer="CrazyMax"
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2" \
@@ -53,7 +53,6 @@ RUN apk --update --no-cache add \
     mailx \
     openssl \
     shadow \
-    su-exec \
     tzdata \
   && ln -sf /usr/bin/msmtp /usr/sbin/sendmail \
   && addgroup -g ${PGID} msmtpd \
