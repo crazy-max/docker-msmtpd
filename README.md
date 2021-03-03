@@ -19,10 +19,9 @@ If you are interested, [check out](https://hub.docker.com/r/crazymax/) my other 
 ___
 
 * [Features](#features)
-* [Docker](#docker)
-  * [Image](#image)
-  * [Environment variables](#environment-variables)
-  * [Ports](#ports)
+* [Image](#image)
+* [Environment variables](#environment-variables)
+* [Ports](#ports)
 * [Usage](#usage)
   * [Docker Compose](#docker-compose)
   * [Kubernetes](#kubernetes)
@@ -38,9 +37,7 @@ ___
 * Bind to [unprivileged port](#ports)
 * Multi-platform image
 
-## Docker
-
-### Image
+## Image
 
 | Registry                                                                                         | Image                           |
 |--------------------------------------------------------------------------------------------------|---------------------------------|
@@ -63,7 +60,7 @@ Image: crazymax/msmtpd:latest
    - linux/s390x
 ```
 
-### Environment variables
+## Environment variables
 
 * `TZ`: Timezone assigned to the container (default `UTC`)
 * `PUID`: Daemon user id (default `1000`)
@@ -83,7 +80,7 @@ Image: crazymax/msmtpd:latest
 
 > 💡 More info: https://marlam.de/msmtp/msmtp.html
 
-### Ports
+## Ports
 
 * `2500`: SMTP relay port
 
