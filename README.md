@@ -19,6 +19,7 @@ If you are interested, [check out](https://hub.docker.com/r/crazymax/) my other 
 ___
 
 * [Features](#features)
+* [Build locally](#build-locally)
 * [Image](#image)
 * [Environment variables](#environment-variables)
 * [Ports](#ports)
@@ -36,6 +37,19 @@ ___
 * Latest [msmtp/msmtpd](https://marlam.de/msmtp/) release compiled from source
 * Bind to [unprivileged port](#ports)
 * Multi-platform image
+
+## Build locally
+
+```shell
+git clone https://github.com/crazy-max/docker-msmtpd.git
+cd docker-msmtpd
+
+# Build image and output to docker (default)
+docker buildx bake
+
+# Build multi-platform image
+docker buildx bake image-all
+```
 
 ## Image
 
