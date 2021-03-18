@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.8.15-r1 (2021/03/18)
+
+* Upstream Alpine update
+
 ## 1.8.15-r0 (2021/03/13)
 
 * msmtp 1.8.15
