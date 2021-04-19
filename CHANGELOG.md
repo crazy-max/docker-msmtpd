@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.8.15-r2 (2021/04/20)
+
+* alpine-s6 3.13-2.2.0.3
+* Add `SMTP_SET_FROM_HEADER` env var (#23)
+* Add `SMTP_SET_DATE_HEADER` env var
+* Add `SMTP_REMOVE_BCC_HEADERS` env var
+* Add `SMTP_UNDISCLOSED_RECIPIENTS` env var
+
 ## 1.8.15-r1 (2021/03/18)
 
 * Upstream Alpine update
