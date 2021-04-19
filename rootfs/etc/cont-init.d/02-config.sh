@@ -10,8 +10,12 @@ TZ=${TZ:-UTC}
 #SMTP_AUTH=${SMTP_AUTH:-off}
 #SMTP_USER=${SMTP_USER:-foo}
 #SMTP_PASSWORD=${SMTP_PASSWORD:-bar}
-#SMTP_FROM=${SMTP_FROM:-foo@example.com}
 #SMTP_DOMAIN=${SMTP_DOMAIN:-example.com}
+#SMTP_FROM=${SMTP_FROM:-foo@example.com}
+#SMTP_SET_FROM_HEADER=${SMTP_SET_FROM_HEADER:-auto}
+#SMTP_SET_DATE_HEADER=${SMTP_SET_DATE_HEADER:-auto}
+#SMTP_REMOVE_BCC_HEADERS=${SMTP_REMOVE_BCC_HEADERS:-on}
+#SMTP_UNDISCLOSED_RECIPIENTS=${SMTP_UNDISCLOSED_RECIPIENTS:-off}
 
 # From https://github.com/docker-library/mariadb/blob/master/docker-entrypoint.sh#L21-L41
 # usage: file_env VAR [DEFAULT]
@@ -55,14 +59,18 @@ EOL
 
 file_env 'SMTP_USER'
 file_env 'SMTP_PASSWORD'
-if [ -n "$SMTP_PORT" ];           then echo "port $SMTP_PORT" >> /etc/msmtprc; fi
-if [ -n "$SMTP_TLS" ];            then echo "tls $SMTP_TLS" >> /etc/msmtprc; fi
-if [ -n "$SMTP_STARTTLS" ];       then echo "tls_starttls $SMTP_STARTTLS" >> /etc/msmtprc; fi
-if [ -n "$SMTP_TLS_CHECKCERT" ];  then echo "tls_certcheck $SMTP_TLS_CHECKCERT" >> /etc/msmtprc; fi
-if [ -n "$SMTP_AUTH" ];           then echo "auth $SMTP_AUTH" >> /etc/msmtprc; fi
-if [ -n "$SMTP_USER" ];           then echo "user $SMTP_USER" >> /etc/msmtprc; fi
-if [ -n "$SMTP_PASSWORD" ];       then echo "password $SMTP_PASSWORD" >> /etc/msmtprc; fi
-if [ -n "$SMTP_FROM" ];           then echo "from $SMTP_FROM" >> /etc/msmtprc; fi
-if [ -n "$SMTP_DOMAIN" ];         then echo "domain $SMTP_DOMAIN" >> /etc/msmtprc; fi
+if [ -n "$SMTP_PORT" ];                     then echo "port $SMTP_PORT" >> /etc/msmtprc; fi
+if [ -n "$SMTP_TLS" ];                      then echo "tls $SMTP_TLS" >> /etc/msmtprc; fi
+if [ -n "$SMTP_STARTTLS" ];                 then echo "tls_starttls $SMTP_STARTTLS" >> /etc/msmtprc; fi
+if [ -n "$SMTP_TLS_CHECKCERT" ];            then echo "tls_certcheck $SMTP_TLS_CHECKCERT" >> /etc/msmtprc; fi
+if [ -n "$SMTP_AUTH" ];                     then echo "auth $SMTP_AUTH" >> /etc/msmtprc; fi
+if [ -n "$SMTP_USER" ];                     then echo "user $SMTP_USER" >> /etc/msmtprc; fi
+if [ -n "$SMTP_PASSWORD" ];                 then echo "password $SMTP_PASSWORD" >> /etc/msmtprc; fi
+if [ -n "$SMTP_DOMAIN" ];                   then echo "domain $SMTP_DOMAIN" >> /etc/msmtprc; fi
+if [ -n "$SMTP_FROM" ];                     then echo "from $SMTP_FROM" >> /etc/msmtprc; fi
+if [ -n "$SMTP_SET_FROM_HEADER" ];          then echo "set_from_header $SMTP_SET_FROM_HEADER" >> /etc/msmtprc; fi
+if [ -n "$SMTP_SET_DATE_HEADER" ];          then echo "set_date_header $SMTP_SET_DATE_HEADER" >> /etc/msmtprc; fi
+if [ -n "$SMTP_REMOVE_BCC_HEADERS" ];       then echo "remove_bcc_headers $SMTP_REMOVE_BCC_HEADERS" >> /etc/msmtprc; fi
+if [ -n "$SMTP_UNDISCLOSED_RECIPIENTS" ];   then echo "undisclosed_recipients $SMTP_UNDISCLOSED_RECIPIENTS" >> /etc/msmtprc; fi
 unset SMTP_USER
 unset SMTP_PASSWORD

@@ -61,8 +61,6 @@ spec:
                 value: "/run/secrets/smtp_user"
               - name: SMTP_PASSWORD_FILE
                 value: "/run/secrets/smtp_password"
-              - name: SMTP_FROM
-                value: "foo@gmail.com"
               - name: SMTP_DOMAIN
                 value: "localhost"
               volumeMounts:

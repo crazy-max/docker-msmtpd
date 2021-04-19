@@ -87,8 +87,12 @@ Image: crazymax/msmtpd:latest
 * `SMTP_AUTH`: Enable or disable authentication and optionally [choose a method](https://marlam.de/msmtp/msmtp.html#Authentication-commands) to use. The argument `on` chooses a method automatically.
 * `SMTP_USER`: Set the user name for authentication. Authentication must be activated with the `SMTP_AUTH` env var.
 * `SMTP_PASSWORD`: Set the password for authentication. Authentication must be activated with the `SMTP_AUTH` env var.
-* `SMTP_DOMAIN`: Argument of the `SMTP EHLO` command. Default is `localhost`.
+* `SMTP_DOMAIN`: Argument of the `SMTP EHLO` command (default `localhost`)
 * `SMTP_FROM`: Set the envelope-from address. Supported substitution patterns can be found [here](https://marlam.de/msmtp/msmtp.html#Commands-specific-to-sendmail-mode).
+* `SMTP_SET_FROM_HEADER`: When to set a From header. Can be [`auto`, `on` or `off`](https://marlam.de/msmtp/msmtp.html#Commands-specific-to-sendmail-mode) (default `auto`)
+* `SMTP_SET_DATE_HEADER`: When to set a Date header. Can be [`auto` or `off`](https://marlam.de/msmtp/msmtp.html#Commands-specific-to-sendmail-mode) (default `auto`)
+* `SMTP_REMOVE_BCC_HEADERS`: Controls whether to remove Bcc headers. Can be [`on` or `off`](https://marlam.de/msmtp/msmtp.html#Commands-specific-to-sendmail-mode) (default `on`)
+* `SMTP_UNDISCLOSED_RECIPIENTS`: When set, the original To, Cc, and Bcc headers of the mail are removed and a single new header line `To: undisclosed-recipients:;` is added. Can be [`on` or `off`](https://marlam.de/msmtp/msmtp.html#Commands-specific-to-sendmail-mode) (default `off`)
 
 > 💡 `SMTP_USER_FILE` and `SMTP_PASSWORD_FILE` can be used to fill in the value from a file, especially for Docker's secrets feature.
 
