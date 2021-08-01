@@ -33,7 +33,6 @@ RUN ./configure \
   && msmtp --version
 
 FROM crazymax/alpine-s6:3.13-2.2.0.3
-LABEL maintainer="CrazyMax"
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2" \
   TZ="UTC" \
