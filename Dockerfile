@@ -1,4 +1,4 @@
-ARG MSMTP_VERSION=1.8.15
+ARG MSMTP_VERSION=1.8.16
 
 FROM --platform=${BUILDPLATFORM:-linux/amd64} crazymax/alpine-s6:3.14-2.2.0.3 AS download
 RUN apk --update --no-cache add curl tar unzip xz
