@@ -1,11 +1,11 @@
 # syntax=docker/dockerfile:1-labs
 
 ARG MSMTP_VERSION=1.8.19
-ARG ALPINE_S6_VERSION=3.14-2.2.0.3
+ARG ALPINE_S6_VERSION=3.15-2.2.0.3
 ARG XX_VERSION=1.1.0
 
 FROM --platform=$BUILDPLATFORM tonistiigi/xx:${XX_VERSION} AS xx
-FROM --platform=$BUILDPLATFORM alpine:3.14 AS base
+FROM --platform=$BUILDPLATFORM alpine:3.15 AS base
 COPY --from=xx / /
 RUN apk --update --no-cache add clang curl file make pkgconf tar xz
 ARG MSMTP_VERSION
@@ -18,7 +18,7 @@ ARG TARGETPLATFORM
 RUN xx-apk --no-cache --no-scripts add g++ gettext-dev gnutls-dev libidn2-dev libgsasl-dev libsecret-dev
 RUN <<EOT
 set -ex
-LDFLAGS="-Wl,-rpath-link,/$(xx-info)/usr/lib" ./configure --host=$(xx-clang --print-target-triple) --prefix=/usr
+CXX=xx-clang++ ./configure --host=$(xx-clang --print-target-triple) --prefix=/usr --with-libgsasl
 make -j$(nproc)
 make install
 xx-verify /usr/bin/msmtp
