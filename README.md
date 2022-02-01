@@ -85,7 +85,7 @@ Image: crazymax/msmtpd:latest
 * `SMTP_STARTTLS`: Start TLS from within the session (`on`, default), or tunnel the session through TLS (`off`).
 * `SMTP_TLS_CHECKCERT`: Enable or disable checks of the server certificate (`on` or `off`). They are enabled by default.
 * `SMTP_AUTH`: Enable or disable authentication and optionally [choose a method](https://marlam.de/msmtp/msmtp.html#Authentication-commands) to use. The argument `on` chooses a method automatically.
-* `SMTP_USER`: Set the user name for authentication. Authentication must be activated with the `SMTP_AUTH` env var.
+* `SMTP_USER`: Set the username for authentication. Authentication must be activated with the `SMTP_AUTH` env var.
 * `SMTP_PASSWORD`: Set the password for authentication. Authentication must be activated with the `SMTP_AUTH` env var.
 * `SMTP_DOMAIN`: Argument of the `SMTP EHLO` command (default `localhost`)
 * `SMTP_FROM`: Set the envelope-from address. Supported substitution patterns can be found [here](https://marlam.de/msmtp/msmtp.html#Commands-specific-to-sendmail-mode).
