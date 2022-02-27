@@ -93,6 +93,8 @@ Image: crazymax/msmtpd:latest
 * `SMTP_SET_DATE_HEADER`: When to set a Date header. Can be [`auto` or `off`](https://marlam.de/msmtp/msmtp.html#Commands-specific-to-sendmail-mode) (default `auto`)
 * `SMTP_REMOVE_BCC_HEADERS`: Controls whether to remove Bcc headers. Can be [`on` or `off`](https://marlam.de/msmtp/msmtp.html#Commands-specific-to-sendmail-mode) (default `on`)
 * `SMTP_UNDISCLOSED_RECIPIENTS`: When set, the original To, Cc, and Bcc headers of the mail are removed and a single new header line `To: undisclosed-recipients:;` is added. Can be [`on` or `off`](https://marlam.de/msmtp/msmtp.html#Commands-specific-to-sendmail-mode) (default `off`)
+* `SMTP_DSN_NOTIFY`: Set the condition(s) under which the mail system should send DSN (Delivery Status Notification) messages as comma separated values. Available values are [`off`, `never`, `failure`, `delay` and `success`](https://marlam.de/msmtp/msmtp.html#index-dsn_005fnotify) (default `off`)
+* `SMTP_DSN_RETURN`: Controls how much of a mail should be returned in DSN (Delivery Status Notification) messages. Can be [`headers`, `full` or `off`](https://marlam.de/msmtp/msmtp.html#index-dsn_005freturn) (default `off`)
 
 > 💡 `SMTP_USER_FILE` and `SMTP_PASSWORD_FILE` can be used to fill in the value from a file, especially for Docker's secrets feature.
 
