@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.19-r1 (2022/02/27)
+
+* Add `SMTP_DSN_NOTIFY` and `SMTP_DSN_RETURN` env vars (#39)
+* Alpine Linux 3.15 (#37)
+* Native cross compilation (#34)
+
 ## 1.8.19-r0 (2021/11/15)
 
 * msmtp 1.8.19
