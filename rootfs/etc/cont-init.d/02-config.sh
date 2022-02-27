@@ -17,6 +17,8 @@ TZ=${TZ:-UTC}
 #SMTP_SET_DATE_HEADER=${SMTP_SET_DATE_HEADER:-auto}
 #SMTP_REMOVE_BCC_HEADERS=${SMTP_REMOVE_BCC_HEADERS:-on}
 #SMTP_UNDISCLOSED_RECIPIENTS=${SMTP_UNDISCLOSED_RECIPIENTS:-off}
+#SMTP_DSN_NOTIFY=${SMTP_DSN_NOTIFY:-off}
+#SMTP_DSN_RETURN=${SMTP_DSN_RETURN:-off}
 
 # From https://github.com/docker-library/mariadb/blob/master/docker-entrypoint.sh#L21-L41
 # usage: file_env VAR [DEFAULT]
@@ -73,5 +75,7 @@ if [ -n "$SMTP_SET_FROM_HEADER" ];          then echo "set_from_header $SMTP_SET
 if [ -n "$SMTP_SET_DATE_HEADER" ];          then echo "set_date_header $SMTP_SET_DATE_HEADER" >> /etc/msmtprc; fi
 if [ -n "$SMTP_REMOVE_BCC_HEADERS" ];       then echo "remove_bcc_headers $SMTP_REMOVE_BCC_HEADERS" >> /etc/msmtprc; fi
 if [ -n "$SMTP_UNDISCLOSED_RECIPIENTS" ];   then echo "undisclosed_recipients $SMTP_UNDISCLOSED_RECIPIENTS" >> /etc/msmtprc; fi
+if [ -n "$SMTP_DSN_NOTIFY" ];               then echo "dsn_notify $SMTP_DSN_NOTIFY" >> /etc/msmtprc; fi
+if [ -n "$SMTP_DSN_RETURN" ];               then echo "dsn_return $SMTP_DSN_RETURN" >> /etc/msmtprc; fi
 unset SMTP_USER
 unset SMTP_PASSWORD
