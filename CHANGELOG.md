@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.8.19-r2 (2022/03/13)
+
+* Fix sysconfdir (#43)
+
 ## 1.8.19-r1 (2022/02/27)
 
 * Add `SMTP_DSN_NOTIFY` and `SMTP_DSN_RETURN` env vars (#39)
