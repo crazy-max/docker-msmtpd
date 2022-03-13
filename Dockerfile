@@ -18,7 +18,7 @@ ARG TARGETPLATFORM
 RUN xx-apk --no-cache --no-scripts add g++ gettext-dev gnutls-dev libidn2-dev libgsasl-dev libsecret-dev
 RUN <<EOT
 set -ex
-CXX=xx-clang++ ./configure --host=$(xx-clang --print-target-triple) --prefix=/usr --with-libgsasl
+CXX=xx-clang++ ./configure --host=$(xx-clang --print-target-triple) --prefix=/usr --sysconfdir=/etc --localstatedir=/var --with-libgsasl
 make -j$(nproc)
 make install
 xx-verify /usr/bin/msmtp
