@@ -79,3 +79,7 @@ if [ -n "$SMTP_DSN_NOTIFY" ];               then echo "dsn_notify $SMTP_DSN_NOTI
 if [ -n "$SMTP_DSN_RETURN" ];               then echo "dsn_return $SMTP_DSN_RETURN" >> /etc/msmtprc; fi
 unset SMTP_USER
 unset SMTP_PASSWORD
+
+echo "Fix configuration permissions..."
+chown root:msmtpd /etc/msmtprc
+chmod 640 /etc/msmtprc
