@@ -1,6 +1,6 @@
-# syntax=docker/dockerfile:1-labs
+# syntax=docker/dockerfile:1
 
-ARG MSMTP_VERSION=1.8.19
+ARG MSMTP_VERSION=1.8.20
 ARG ALPINE_S6_VERSION=3.15-2.2.0.3
 ARG XX_VERSION=1.1.0
 
