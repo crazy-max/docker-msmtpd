@@ -1,11 +1,11 @@
 # syntax=docker/dockerfile:1
 
 ARG MSMTP_VERSION=1.8.20
-ARG ALPINE_S6_VERSION=3.15-2.2.0.3
-ARG XX_VERSION=1.1.0
+ARG ALPINE_VERSION=3.16
+ARG XX_VERSION=1.1.2
 
 FROM --platform=$BUILDPLATFORM tonistiigi/xx:${XX_VERSION} AS xx
-FROM --platform=$BUILDPLATFORM alpine:3.15 AS base
+FROM --platform=$BUILDPLATFORM alpine:${ALPINE_VERSION} AS base
 COPY --from=xx / /
 RUN apk --update --no-cache add clang curl file make pkgconf tar xz
 ARG MSMTP_VERSION
@@ -26,7 +26,7 @@ xx-verify /usr/bin/msmtpd
 file /usr/bin/msmtpd
 EOT
 
-FROM crazymax/alpine-s6:${ALPINE_S6_VERSION}
+FROM crazymax/alpine-s6:${ALPINE_VERSION}-2.2.0.3
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2" \
   TZ="UTC" \
