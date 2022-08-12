@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG MSMTP_VERSION=1.8.20
+ARG MSMTP_VERSION=1.8.22
 ARG ALPINE_VERSION=3.16
 ARG XX_VERSION=1.1.2
 
@@ -15,10 +15,10 @@ RUN curl -sSL "https://marlam.de/msmtp/releases/msmtp-$MSMTP_VERSION.tar.xz" | t
 FROM base AS builder
 ENV XX_CC_PREFER_LINKER=ld
 ARG TARGETPLATFORM
-RUN xx-apk --no-cache --no-scripts add g++ gettext-dev gnutls-dev libidn2-dev libgsasl-dev libsecret-dev
+RUN xx-apk --no-cache --no-scripts add g++ gettext-dev gnutls-dev libidn2-dev
 RUN <<EOT
 set -ex
-CXX=xx-clang++ ./configure --host=$(xx-clang --print-target-triple) --prefix=/usr --sysconfdir=/etc --localstatedir=/var --with-libgsasl
+CXX=xx-clang++ ./configure --host=$(xx-clang --print-target-triple) --prefix=/usr --sysconfdir=/etc --localstatedir=/var
 make -j$(nproc)
 make install
 xx-verify /usr/bin/msmtp
