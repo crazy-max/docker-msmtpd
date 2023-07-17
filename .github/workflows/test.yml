@@ -39,10 +39,13 @@ jobs:
         env:
           DEFAULT_TAG: ${{ env.BUILD_TAG }}
       -
-        name: Start container
+        name: Start
         run: |
-          docker rm -f ${{ env.CONTAINER_NAME }} > /dev/null 2>&1 || true
-          docker run -d --env "SMTP_HOST=smtp.foo.bar" --name ${{ env.CONTAINER_NAME }} ${{ env.BUILD_TAG }}
+          docker compose up -d
+        working-directory: test
+        env:
+          MSMTPD_IMAGE: ${{ env.BUILD_TAG }}
+          MSMTPD_CONTAINER: ${{ env.CONTAINER_NAME }}
       -
         name: Check container logs
         uses: crazy-max/.github/.github/actions/container-logs-check@main
@@ -50,3 +53,12 @@ jobs:
           container_name: ${{ env.CONTAINER_NAME }}
           log_check: "[services.d] done"
           timeout: 120
+      -
+        name: Logs
+        if: always()
+        run: |
+          docker compose logs
+        working-directory: test
+        env:
+          MSMTPD_IMAGE: ${{ env.BUILD_TAG }}
+          MSMTPD_CONTAINER: ${{ env.CONTAINER_NAME }}
