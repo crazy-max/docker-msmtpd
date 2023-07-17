@@ -112,11 +112,11 @@ Image: crazymax/msmtpd:latest
 ### Docker Compose
 
 Docker compose is the recommended way to run this image. You can use the following
-[docker compose template](examples/compose/docker-compose.yml), then run the container:
+[docker compose template](examples/compose/compose.yml), then run the container:
 
 ```bash
-docker-compose up -d
-docker-compose logs -f
+docker compose up -d
+docker compose logs -f
 ```
 
 ### Kubernetes
@@ -143,8 +143,8 @@ $ docker run -d -p 2500:2500 --name msmtpd \
 Recreate the container whenever I push an update:
 
 ```bash
-docker-compose pull
-docker-compose up -d
+docker compose pull
+docker compose up -d
 ```
 
 ## Contributing

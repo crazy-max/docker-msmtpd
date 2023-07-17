@@ -1,0 +1,16 @@
+name: msmtpd
+
+services:
+  msmtpd:
+    image: ${MSMTPD_IMAGE:-crazymax/msmtpd}
+    container_name: ${MSMTPD_CONTAINER:-msmtpd}
+    ports:
+      - target: 2500
+        published: 2500
+        protocol: tcp
+    environment:
+      - "TZ=Europe/Paris"
+      - "PUID=1500"
+      - "PGID=1500"
+      - "SMTP_HOST=smtp.foo.bar"
+    restart: always
