@@ -112,6 +112,10 @@ add_account_to_file() {
     unset ENV_VARS["${account_prefix}_PASSWORD_FILE"]
   fi
 
+  #default values
+  ENV_VARS["SMTP_${account}_LOGFILE"]="${ENV_VARS["SMTP_${account}_LOGFILE"]:-"-"}"
+  ENV_VARS["SMTP_${account}_SYSLOG"]="${ENV_VARS["SMTP_${account}_SYSLOG"]:-"off"}"
+
   echo "account $account_lower" >> "$msmtprc_file"
 
   for key in "${!ENV_VARS[@]}"; do
@@ -121,20 +125,6 @@ add_account_to_file() {
 
     config=$(echo "$key" | cut -d_ -f3- | tr '[:upper:]' '[:lower:]')
     value=${ENV_VARS[$key]}
-
-    #default values
-    if [ -n "$value" ]; then
-      case "$config" in
-        "logfile")
-            config="-"
-          ;;
-        "syslog")
-            config="off"
-          ;;
-        *)
-          ;;
-      esac
-    fi
 
     echo "$config $value" >> "$msmtprc_file"
   done
