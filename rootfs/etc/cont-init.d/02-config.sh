@@ -55,8 +55,8 @@ for var in "${OLD_VARIABLES[@]}"; do
 done
 
 #edge case of tls_starttls
-ENV_VARS[TLS_STARTTLS]="${ENV_VARS[STARTTLS]}"
-unset ENV_VARS[STARTTLS]
+ENV_VARS[SMTP_DEFAULT_TLS_STARTTLS]="${ENV_VARS[SMTP_DEFAULT_STARTTLS]}"
+unset ENV_VARS[SMTP_DEFAULT_STARTTLS]
 
 accounts=$(for key in "${!ENV_VARS[@]}"; do
   echo "$key" | cut -d_ -f2
