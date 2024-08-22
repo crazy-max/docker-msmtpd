@@ -58,6 +58,10 @@ done
 ENV_VARS[SMTP_DEFAULT_TLS_STARTTLS]="${ENV_VARS[SMTP_DEFAULT_STARTTLS]}"
 unset ENV_VARS[SMTP_DEFAULT_STARTTLS]
 
+#edge case of tls_certcheck
+ENV_VARS[SMTP_DEFAULT_TLS_CERTCHECK]="${ENV_VARS[SMTP_DEFAULT_TLS_CHECKCERT]}"
+unset ENV_VARS[SMTP_DEFAULT_TLS_CHECKCERT]
+
 accounts=$(for key in "${!ENV_VARS[@]}"; do
   echo "$key" | cut -d_ -f2
 done | sort | uniq)
