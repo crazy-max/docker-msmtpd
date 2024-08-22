@@ -3,79 +3,156 @@
 
 TZ=${TZ:-UTC}
 
-#SMTP_HOST=${SMTP_HOST:-smtp.example.com}
-#SMTP_PORT=${SMTP_PORT:-25}
-#SMTP_TLS=${SMTP_TLS:-off}
-#SMTP_STARTTLS=${SMTP_STARTTLS:-off}
-#SMTP_TLS_CHECKCERT=${SMTP_TLS_CHECKCERT:-on}
-#SMTP_AUTH=${SMTP_AUTH:-off}
-#SMTP_USER=${SMTP_USER:-foo}
-#SMTP_PASSWORD=${SMTP_PASSWORD:-bar}
-#SMTP_DOMAIN=${SMTP_DOMAIN:-example.com}
-#SMTP_FROM=${SMTP_FROM:-foo@example.com}
-#SMTP_SET_FROM_HEADER=${SMTP_SET_FROM_HEADER:-auto}
-#SMTP_SET_DATE_HEADER=${SMTP_SET_DATE_HEADER:-auto}
-#SMTP_REMOVE_BCC_HEADERS=${SMTP_REMOVE_BCC_HEADERS:-on}
-#SMTP_UNDISCLOSED_RECIPIENTS=${SMTP_UNDISCLOSED_RECIPIENTS:-off}
-#SMTP_DSN_NOTIFY=${SMTP_DSN_NOTIFY:-off}
-#SMTP_DSN_RETURN=${SMTP_DSN_RETURN:-off}
-
-# From https://github.com/docker-library/mariadb/blob/master/docker-entrypoint.sh#L21-L41
-# usage: file_env VAR [DEFAULT]
-#    ie: file_env 'XYZ_DB_PASSWORD' 'example'
-# (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of
-#  "$XYZ_DB_PASSWORD" from a file, especially for Docker's secrets feature)
-file_env() {
-  local var="$1"
-  local fileVar="${var}_FILE"
-  local def="${2:-}"
-  if [ "${!var:-}" ] && [ "${!fileVar:-}" ]; then
-    echo >&2 "error: both $var and $fileVar are set (but are exclusive)"
-    exit 1
-  fi
-  local val="$def"
-  if [ "${!var:-}" ]; then
-    val="${!var}"
-  elif [ "${!fileVar:-}" ]; then
-    val="$(< "${!fileVar}")"
-  fi
-  export "$var"="$val"
-  unset "$fileVar"
-}
-
-if [ -z "$SMTP_HOST" ]; then
-  >&2 echo "ERROR: SMTP_HOST must be defined"
-  exit 1
-fi
 
 echo "Setting timezone to ${TZ}..."
 ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime
 echo ${TZ} > /etc/timezone
 
-echo "Creating configuration..."
-cat > /etc/msmtprc <<EOL
-account default
-logfile -
-syslog off
-host ${SMTP_HOST}
-EOL
+msmtprc_file="/etc/msmtprc"
 
-file_env 'SMTP_USER'
-file_env 'SMTP_PASSWORD'
-if [ -n "$SMTP_PORT" ];                     then echo "port $SMTP_PORT" >> /etc/msmtprc; fi
-if [ -n "$SMTP_TLS" ];                      then echo "tls $SMTP_TLS" >> /etc/msmtprc; fi
-if [ -n "$SMTP_STARTTLS" ];                 then echo "tls_starttls $SMTP_STARTTLS" >> /etc/msmtprc; fi
-if [ -n "$SMTP_TLS_CHECKCERT" ];            then echo "tls_certcheck $SMTP_TLS_CHECKCERT" >> /etc/msmtprc; fi
-if [ -n "$SMTP_AUTH" ];                     then echo "auth $SMTP_AUTH" >> /etc/msmtprc; fi
-if [ -n "$SMTP_USER" ];                     then echo "user $SMTP_USER" >> /etc/msmtprc; fi
-if [ -n "$SMTP_PASSWORD" ];                 then echo "password $SMTP_PASSWORD" >> /etc/msmtprc; fi
-if [ -n "$SMTP_DOMAIN" ];                   then echo "domain $SMTP_DOMAIN" >> /etc/msmtprc; fi
-if [ -n "$SMTP_FROM" ];                     then echo "from $SMTP_FROM" >> /etc/msmtprc; fi
-if [ -n "$SMTP_SET_FROM_HEADER" ];          then echo "set_from_header $SMTP_SET_FROM_HEADER" >> /etc/msmtprc; fi
-if [ -n "$SMTP_SET_DATE_HEADER" ];          then echo "set_date_header $SMTP_SET_DATE_HEADER" >> /etc/msmtprc; fi
-if [ -n "$SMTP_REMOVE_BCC_HEADERS" ];       then echo "remove_bcc_headers $SMTP_REMOVE_BCC_HEADERS" >> /etc/msmtprc; fi
-if [ -n "$SMTP_UNDISCLOSED_RECIPIENTS" ];   then echo "undisclosed_recipients $SMTP_UNDISCLOSED_RECIPIENTS" >> /etc/msmtprc; fi
-if [ -n "$SMTP_DSN_NOTIFY" ];               then echo "dsn_notify $SMTP_DSN_NOTIFY" >> /etc/msmtprc; fi
-if [ -n "$SMTP_DSN_RETURN" ];               then echo "dsn_return $SMTP_DSN_RETURN" >> /etc/msmtprc; fi
-unset SMTP_USER
-unset SMTP_PASSWORD
+# to maintain backward compatibility
+forbidden_accounts="HOST PORT TLS STARTTLS AUTH USER PASSWORD DOMAIN FROM SET REMOVE UNDISCLOSED DSN"
+
+# prepare variables
+declare -A ENV_VARS
+prefix="SMTP_"
+for key in $(env | grep "^SMTP_" | cut -s -d= -f1); do
+  value=$(printenv "$key")
+  
+  ENV_VARS[$key]="$value"
+done
+
+
+# backward compatibility
+OLD_VARIABLES=(
+    "HOST"
+    "PORT"
+    "TLS"
+    "STARTTLS"
+    "TLS_CHECKCERT"
+    "AUTH"
+    "USER"
+    "USER_FILE"
+    "PASSWORD"
+    "PASSWORD_FILE"
+    "DOMAIN"
+    "FROM"
+    "SET_FROM_HEADER"
+    "SET_DATE_HEADER"
+    "REMOVE_BCC_HEADERS"
+    "UNDISCLOSED_RECIPIENTS"
+    "DSN_NOTIFY"
+    "DSN_RETURN"
+)
+
+for var in "${OLD_VARIABLES[@]}"; do
+    default_var="SMTP_DEFAULT_$var"
+    main_var="SMTP_$var"
+
+    if [ -z "${ENV_VARS[$default_var]}" ] && [ -n "${ENV_VARS[$main_var]}" ]; then
+        ENV_VARS[$default_var]="${ENV_VARS[$main_var]}"
+    fi
+done
+
+accounts=$(for key in "${!ENV_VARS[@]}"; do
+  echo "$key" | cut -d_ -f2
+done | sort | uniq)
+
+is_forbidden_account() {
+    account="$1"
+    for forbidden in $forbidden_accounts; do
+        if [ "$account" = "$forbidden" ]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+stringContain() { case $2 in *$1* ) return 0;; *) return 1;; esac ;}
+
+add_account_to_file() {
+  account="$1"
+  account_lower=$(echo "$account" | tr '[:upper:]' '[:lower:]')
+  account_prefix=SMTP_${account}
+
+
+
+  if is_forbidden_account "$account"; then
+    forbidden_list=$(echo "$forbidden_accounts" | tr ' ' ',')
+    echo "> env ${account_prefix}* are deprecated. Maybe you used a deprecated variable, or a forbidden account name. Forbidden accounts are: $forbidden_list"
+    return
+  fi
+
+  HOST_VAR="${account_prefix}_HOST"
+  if [ -z "${ENV_VARS["$HOST_VAR"]}" ]; then
+    echo "> ${HOST_VAR} is required to configure this account . Skipped"
+    return 1
+  fi
+
+  echo "Creating configuration for account : $account_lower"
+
+  #handle username from file
+  if [ ! -z "${ENV_VARS["${account_prefix}_USER_FILE"]}" ]; then
+    ENV_VARS["${account_prefix}_USER"]="$(< "${ENV_VARS["${account_prefix}_USER_FILE"]}")"
+    unset ENV_VARS["${account_prefix}_USER_FILE"]
+  fi
+
+  #handle password from file or not
+  if [ ! -z "${ENV_VARS["${account_prefix}_PASSWORD_FILE"]}" ]; then
+    ENV_VARS["${account_prefix}_PASSWORDEVAL"]="cat ${ENV_VARS["${account_prefix}_PASSWORD_FILE"]}"
+    unset ENV_VARS["${account_prefix}_PASSWORD"]
+    unset ENV_VARS["${account_prefix}_PASSWORD_FILE"]
+  fi
+
+  echo "account $account_lower" >> "$msmtprc_file"
+
+  for key in "${!ENV_VARS[@]}"; do
+    if ! stringContain "${account_prefix}_" "$key"; then
+      continue;
+    fi
+
+    config=$(echo "$key" | cut -d_ -f3- | tr '[:upper:]' '[:lower:]')
+    value=${ENV_VARS[$key]}
+
+    #default values
+    if [ -n "$value" ]; then
+      case "$config" in
+        "logfile")
+            config="-"
+          ;;
+        "syslog")
+            config="off"
+          ;;
+        *)
+          ;;
+      esac
+    fi
+
+    echo "$config $value" >> "$msmtprc_file"
+  done
+  
+  # add en empty line to separate accounts
+  echo "" >> "$msmtprc_file"
+}
+
+echo "Creating configuration..."
+
+if [ -z "$ENV_VARS[SMTP_DEFAULT_HOST]" ]; then
+  >&2 echo "ERROR: SMTP_DEFAULT_HOST must be defined"
+  exit 1
+fi
+
+if ! add_account_to_file "DEFAULT"; then
+  >&2 echo "Default account fail to be configured"
+  exit 1
+fi
+
+for account in $accounts; do
+  if [ $(echo "$account" | tr '[:upper:]' '[:lower:]') == "default" ]; then continue; fi
+
+  add_account_to_file "$account"
+done
+
+echo ""
+echo cat $msmtprc_file
+cat $msmtprc_file
