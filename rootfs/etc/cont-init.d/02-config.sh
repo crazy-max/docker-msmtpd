@@ -54,6 +54,10 @@ for var in "${OLD_VARIABLES[@]}"; do
     fi
 done
 
+#edge case of tls_starttls
+ENV_VARS[TLS_STARTTLS]="${ENV_VARS[STARTTLS]}"
+unset ENV_VARS[STARTTLS]
+
 accounts=$(for key in "${!ENV_VARS[@]}"; do
   echo "$key" | cut -d_ -f2
 done | sort | uniq)
