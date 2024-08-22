@@ -8,21 +8,21 @@ echo USER_FILE $USER_FILE
 echo PASSWORD $PASSWORD
 echo PASSWORD_FILE $PASSWORD_FILE
 
-if [ -n "$USER_FILE" ]; then
-    USER=$(cat "$USER_FILE")
+if [ -n "$MSMTP_USER_FILE" ]; then
+    MSMTP_USER=$(cat "$MSMTP_USER_FILE")
 fi
 
 PASSWORD_CMD=""
-if [ -n "$PASSWORD" ]; then
-    PASSWORD_CMD="\"echo \\\"$PASSWORD\\\"\""
+if [ -n "$MSMTP_PASSWORD" ]; then
+    PASSWORD_CMD="\"echo \\\"$MSMTP_PASSWORD\\\"\""
 fi
-if [ -n "$PASSWORD_FILE" ]; then
-    PASSWORD_CMD="\"cat \\\"$PASSWORD_FILE\\\"\""
+if [ -n "$MSMTP_PASSWORD_FILE" ]; then
+    PASSWORD_CMD="\"cat \\\"$MSMTP_PASSWORD_FILE\\\"\""
 fi
 
 AUTH_CMD=""
-if [ -n "$USER" ] && [ -n "$PASSWORD_CMD" ]; then
-    AUTH_CMD=" --auth=${USER},${PASSWORD_CMD}"
+if [ -n "$MSMTP_USER" ] && [ -n "$PASSWORD_CMD" ]; then
+    AUTH_CMD=" --auth=${MSMTP_USER},${PASSWORD_CMD}"
 fi
 
 cat > /etc/services.d/msmtpd/run <<EOL
