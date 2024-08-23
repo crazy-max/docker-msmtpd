@@ -18,7 +18,7 @@ declare -A ENV_VARS
 prefix="SMTP_"
 for key in $(env | grep "^SMTP_" | cut -s -d= -f1); do
   value=$(printenv "$key")
-  
+
   ENV_VARS[$key]="$value"
 done
 
@@ -137,7 +137,7 @@ add_account_to_file() {
 
     echo "$config $value" >> "$current_file"
   done
-  
+
   # add en empty line to separate accounts
   echo "" >> "$current_file"
 }
@@ -160,6 +160,8 @@ for account in $accounts; do
   add_account_to_file "$account"
 done
 
-# add inherit after other accounts
-cat $msmtprc_inherit_file >> $msmtprc_file
-rm $msmtprc_inherit_file
+if [ -f $msmtprc_inherit_file ]; then
+  # add inherit after other accounts
+  cat $msmtprc_inherit_file >> $msmtprc_file
+  rm $msmtprc_inherit_file
+fi
