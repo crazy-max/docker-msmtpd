@@ -45,23 +45,23 @@ spec:
                 value: "1500"
               - name: PGID
                 value: "1500"
-              - name: SMTP_HOST
+              - name: SMTP_DEFAULT_HOST
                 value: "smtp.gmail.com"
-              - name: SMTP_PORT
+              - name: SMTP_DEFAULT_PORT
                 value: "587"
-              - name: SMTP_TLS
+              - name: SMTP_DEFAULT_TLS
                 value: "on"
-              - name: SMTP_STARTTLS
+              - name: SMTP_DEFAULT_TLS_STARTTLS
                 value: "on"
-              - name: SMTP_TLS_CHECKCERT
+              - name: SMTP_DEFAULT_TLS_CERTCHECK
                 value: "on"
-              - name: SMTP_AUTH
+              - name: SMTP_DEFAULT_AUTH
                 value: "on"
-              - name: SMTP_USER_FILE
+              - name: SMTP_DEFAULT_USER_FILE
                 value: "/run/secrets/smtp_user"
-              - name: SMTP_PASSWORD_FILE
+              - name: SMTP_DEFAULT_PASSWORD_FILE
                 value: "/run/secrets/smtp_password"
-              - name: SMTP_DOMAIN
+              - name: SMTP_DEFAULT_DOMAIN
                 value: "localhost"
               volumeMounts:
                 - name: msmtpd-config-user

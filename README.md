@@ -81,30 +81,48 @@ Image: crazymax/msmtpd:latest
 * `TZ`: Timezone assigned to the container (default `UTC`)
 * `PUID`: Daemon user id (default `1500`)
 * `PGID`: Daemon group id (default `1500`)
-* `SMTP_HOST`: SMTP relay server to send the mail to. **required**
-* `SMTP_PORT`: Port that the SMTP relay server listens on. Default `25` or `465` if TLS.
-* `SMTP_TLS`: Enable or disable TLS (also known as SSL) for secured connections (`on` or `off`).
-* `SMTP_STARTTLS`: Start TLS from within the session (`on`, default), or tunnel the session through TLS (`off`).
-* `SMTP_TLS_CHECKCERT`: Enable or disable checks of the server certificate (`on` or `off`). They are enabled by default.
-* `SMTP_AUTH`: Enable or disable authentication and optionally [choose a method](https://marlam.de/msmtp/msmtp.html#Authentication-commands) to use. The argument `on` chooses a method automatically.
-* `SMTP_USER`: Set the username for authentication. Authentication must be activated with the `SMTP_AUTH` env var.
-* `SMTP_PASSWORD`: Set the password for authentication. Authentication must be activated with the `SMTP_AUTH` env var.
-* `SMTP_DOMAIN`: Argument of the `SMTP EHLO` command (default `localhost`)
-* `SMTP_FROM`: Set the envelope-from address. Supported substitution patterns can be found [here](https://marlam.de/msmtp/msmtp.html#Commands-specific-to-sendmail-mode).
-* `SMTP_SET_FROM_HEADER`: When to set a From header. Can be [`auto`, `on` or `off`](https://marlam.de/msmtp/msmtp.html#Commands-specific-to-sendmail-mode) (default `auto`)
-* `SMTP_SET_DATE_HEADER`: When to set a Date header. Can be [`auto` or `off`](https://marlam.de/msmtp/msmtp.html#Commands-specific-to-sendmail-mode) (default `auto`)
-* `SMTP_REMOVE_BCC_HEADERS`: Controls whether to remove Bcc headers. Can be [`on` or `off`](https://marlam.de/msmtp/msmtp.html#Commands-specific-to-sendmail-mode) (default `on`)
-* `SMTP_UNDISCLOSED_RECIPIENTS`: When set, the original To, Cc, and Bcc headers of the mail are removed and a single new header line `To: undisclosed-recipients:;` is added. Can be [`on` or `off`](https://marlam.de/msmtp/msmtp.html#Commands-specific-to-sendmail-mode) (default `off`)
-* `SMTP_DSN_NOTIFY`: Set the condition(s) under which the mail system should send DSN (Delivery Status Notification) messages as comma separated values. Available values are [`off`, `never`, `failure`, `delay` and `success`](https://marlam.de/msmtp/msmtp.html#index-dsn_005fnotify) (default `off`)
-* `SMTP_DSN_RETURN`: Controls how much of a mail should be returned in DSN (Delivery Status Notification) messages. Can be [`headers`, `full` or `off`](https://marlam.de/msmtp/msmtp.html#index-dsn_005freturn) (default `off`)
+* `MSMTP_USER` : Username to authenticate on the msmtp smtp. Also support file to fill value : `MSMTP_USER_FILE`
+* `MSMTP_PASSWORD` : Password to authenticate on the msmtp smtp. Also support file to fill value : `MSMTP_PASSWORD_FILE`
 
-> 💡 `SMTP_USER_FILE` and `SMTP_PASSWORD_FILE` can be used to fill in the value from a file, especially for Docker's secrets feature.
+Next variables are splitted by accounts following this template : 
+```
+SMTP_<account>_<configuration>
+```
 
-> 💡 More info: https://marlam.de/msmtp/msmtp.html
+default account is named `default`, here are some env with the default account :
+* `SMTP_DEFAULT_HOST`: SMTP relay server to send the mail to. **required**
+* `SMTP_DEFAULT_PORT`: Port that the SMTP relay server listens on. Default `25` or `465` if TLS.
+* `SMTP_DEFAULT_TLS`: Enable or disable TLS (also known as SSL) for secured connections (`on` or `off`).
+* `SMTP_DEFAULT_TLS_STARTTLS`: Start TLS from within the session (`on`, default), or tunnel the session through TLS (`off`).
+* `SMTP_DEFAULT_TLS_CERTCHECK`: Enable or disable checks of the server certificate (`on` or `off`). They are enabled by default.
+* `SMTP_DEFAULT_AUTH`: Enable or disable authentication and optionally [choose a method](https://marlam.de/msmtp/msmtp.html#Authentication-commands) to use. The argument `on` chooses a method automatically.
+* `SMTP_DEFAULT_USER`: Set the username for authentication. Authentication must be activated with the `SMTP_AUTH` env var.
+* `SMTP_DEFAULT_PASSWORD`: Set the password for authentication. Authentication must be activated with the `SMTP_AUTH` env var.
+* `SMTP_DEFAULT_DOMAIN`: Argument of the `SMTP EHLO` command (default `localhost`)
+* `SMTP_DEFAULT_FROM`: Set the envelope-from address. Supported substitution patterns can be found [here](https://marlam.de/msmtp/msmtp.html#Commands-specific-to-sendmail-mode).
+* `SMTP_DEFAULT_SET_FROM_HEADER`: When to set a From header. Can be [`auto`, `on` or `off`](https://marlam.de/msmtp/msmtp.html#Commands-specific-to-sendmail-mode) (default `auto`)
+* `SMTP_DEFAULT_SET_DATE_HEADER`: When to set a Date header. Can be [`auto` or `off`](https://marlam.de/msmtp/msmtp.html#Commands-specific-to-sendmail-mode) (default `auto`)
+* `SMTP_DEFAULT_REMOVE_BCC_HEADERS`: Controls whether to remove Bcc headers. Can be [`on` or `off`](https://marlam.de/msmtp/msmtp.html#Commands-specific-to-sendmail-mode) (default `on`)
+* `SMTP_DEFAULT_UNDISCLOSED_RECIPIENTS`: When set, the original To, Cc, and Bcc headers of the mail are removed and a single new header line `To: undisclosed-recipients:;` is added. Can be [`on` or `off`](https://marlam.de/msmtp/msmtp.html#Commands-specific-to-sendmail-mode) (default `off`)
+* `SMTP_DEFAULT_DSN_NOTIFY`: Set the condition(s) under which the mail system should send DSN (Delivery Status Notification) messages as comma separated values. Available values are [`off`, `never`, `failure`, `delay` and `success`](https://marlam.de/msmtp/msmtp.html#index-dsn_005fnotify) (default `off`)
+* `SMTP_DEFAULT_DSN_RETURN`: Controls how much of a mail should be returned in DSN (Delivery Status Notification) messages. Can be [`headers`, `full` or `off`](https://marlam.de/msmtp/msmtp.html#index-dsn_005freturn) (default `off`)
+
+> 💡 All the available configurations are here : https://marlam.de/msmtp/msmtp.html
+
+> 💡 `SMTP_<account>_USER_FILE` and `SMTP_<account>_PASSWORD_FILE` can be used to fill in the value from a file, especially for Docker's secrets feature.
+
+You can also use inherit to extend an existing configuration :
+* `SMTP_TEST2_INHERIT`: allow to inherit one or more configurations . Need to be a list of existing accounts, coma separated : `DEFAULT, TEST, TEST1`
 
 ## Ports
 
 * `2500`: SMTP relay port
+
+## Configuration by file mapping
+
+You can add configuration by mapping a configuration file to `/root/.msmtprc`
+
+You will always need to configure `DEFAULT` account with environment variables
 
 ## Usage
 
@@ -133,7 +151,7 @@ You can also use the following minimal command:
 
 ```bash
 $ docker run -d -p 2500:2500 --name msmtpd \
-  -e "SMTP_HOST=smtp.example.com" \
+  -e "SMTP_DEFAULT_HOST=smtp.example.com" \
   crazymax/msmtpd
 ```
 

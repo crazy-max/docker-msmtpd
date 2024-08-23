@@ -12,5 +12,5 @@ services:
       - "TZ=Europe/Paris"
       - "PUID=1500"
       - "PGID=1500"
-      - "SMTP_HOST=smtp.foo.bar"
+      - "SMTP_DEFAULT_HOST=smtp.foo.bar"
     restart: always

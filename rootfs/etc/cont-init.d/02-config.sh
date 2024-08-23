@@ -3,7 +3,6 @@
 
 TZ=${TZ:-UTC}
 
-
 echo "Setting timezone to ${TZ}..."
 ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime
 echo ${TZ} > /etc/timezone
@@ -161,10 +160,6 @@ for account in $accounts; do
   add_account_to_file "$account"
 done
 
+# add inherit after other accounts
 cat $msmtprc_inherit_file >> $msmtprc_file
-# rm $msmtprc_inherit_file
-
-
-echo ""
-echo cat $msmtprc_file
-cat $msmtprc_file
+rm $msmtprc_inherit_file
