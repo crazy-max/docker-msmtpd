@@ -9,6 +9,7 @@ ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime
 echo ${TZ} > /etc/timezone
 
 msmtprc_file="/etc/msmtprc"
+msmtprc_inherit_file="/etc/msmtprc.inherit"
 
 # to maintain backward compatibility
 forbidden_accounts="HOST PORT TLS STARTTLS AUTH USER PASSWORD DOMAIN FROM SET REMOVE UNDISCLOSED DSN"
@@ -82,8 +83,9 @@ add_account_to_file() {
   account="$1"
   account_lower=$(echo "$account" | tr '[:upper:]' '[:lower:]')
   account_prefix=SMTP_${account}
+  current_file="$msmtprc_file"
 
-
+  inherit="${ENV_VARS["${account_prefix}_INHERIT"]}"
 
   if is_forbidden_account "$account"; then
     forbidden_list=$(echo "$forbidden_accounts" | tr ' ' ',')
@@ -92,7 +94,7 @@ add_account_to_file() {
   fi
 
   HOST_VAR="${account_prefix}_HOST"
-  if [ -z "${ENV_VARS["$HOST_VAR"]}" ]; then
+  if [ -z "${ENV_VARS["$HOST_VAR"]}" ] && [ -z "$inherit" ]; then
     echo "> ${HOST_VAR} is required to configure this account . Skipped"
     return 1
   fi
@@ -112,11 +114,19 @@ add_account_to_file() {
     unset ENV_VARS["${account_prefix}_PASSWORD_FILE"]
   fi
 
-  #default values
-  ENV_VARS["SMTP_${account}_LOGFILE"]="${ENV_VARS["SMTP_${account}_LOGFILE"]:-"-"}"
-  ENV_VARS["SMTP_${account}_SYSLOG"]="${ENV_VARS["SMTP_${account}_SYSLOG"]:-"off"}"
 
-  echo "account $account_lower" >> "$msmtprc_file"
+  INHERIT_STRING=""
+  if [ ! -z "$inherit" ]; then
+    current_file="$msmtprc_inherit_file"
+    unset ENV_VARS["${account_prefix}_INHERIT"]
+    INHERIT_STRING=" : $(echo "$inherit" | tr '[:upper:]' '[:lower:]')"
+  else
+    #default values only if no inherit
+    ENV_VARS["SMTP_${account}_LOGFILE"]="${ENV_VARS["SMTP_${account}_LOGFILE"]:-"-"}"
+    ENV_VARS["SMTP_${account}_SYSLOG"]="${ENV_VARS["SMTP_${account}_SYSLOG"]:-"off"}"
+  fi
+
+  echo "account ${account_lower}${INHERIT_STRING}" >> "$current_file"
 
   for key in "${!ENV_VARS[@]}"; do
     if ! stringContain "${account_prefix}_" "$key"; then
@@ -126,11 +136,11 @@ add_account_to_file() {
     config=$(echo "$key" | cut -d_ -f3- | tr '[:upper:]' '[:lower:]')
     value=${ENV_VARS[$key]}
 
-    echo "$config $value" >> "$msmtprc_file"
+    echo "$config $value" >> "$current_file"
   done
   
   # add en empty line to separate accounts
-  echo "" >> "$msmtprc_file"
+  echo "" >> "$current_file"
 }
 
 echo "Creating configuration..."
@@ -150,6 +160,10 @@ for account in $accounts; do
 
   add_account_to_file "$account"
 done
+
+cat $msmtprc_inherit_file >> $msmtprc_file
+# rm $msmtprc_inherit_file
+
 
 echo ""
 echo cat $msmtprc_file

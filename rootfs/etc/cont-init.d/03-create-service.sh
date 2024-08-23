@@ -3,11 +3,6 @@
 
 mkdir -p /etc/services.d/msmtpd
 
-echo USER $USER
-echo USER_FILE $USER_FILE
-echo PASSWORD $PASSWORD
-echo PASSWORD_FILE $PASSWORD_FILE
-
 if [ -n "$MSMTP_USER_FILE" ]; then
     MSMTP_USER=$(cat "$MSMTP_USER_FILE")
 fi
