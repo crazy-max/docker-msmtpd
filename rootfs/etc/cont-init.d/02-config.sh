@@ -71,6 +71,7 @@ if [ -n "$SMTP_USER" ];                     then echo "user $SMTP_USER" >> /etc/
 if [ -n "$SMTP_PASSWORD" ];                 then echo "password $SMTP_PASSWORD" >> /etc/msmtprc; fi
 if [ -n "$SMTP_DOMAIN" ];                   then echo "domain $SMTP_DOMAIN" >> /etc/msmtprc; fi
 if [ -n "$SMTP_FROM" ];                     then echo "from $SMTP_FROM" >> /etc/msmtprc; fi
+if [ -n "$SMTP_ALLOW_FROM_OVERRIDE" ];      then echo "allow_from_override $SMTP_ALLOW_FROM_OVERRIDE" >> /etc/msmtprc; fi
 if [ -n "$SMTP_SET_FROM_HEADER" ];          then echo "set_from_header $SMTP_SET_FROM_HEADER" >> /etc/msmtprc; fi
 if [ -n "$SMTP_SET_DATE_HEADER" ];          then echo "set_date_header $SMTP_SET_DATE_HEADER" >> /etc/msmtprc; fi
 if [ -n "$SMTP_REMOVE_BCC_HEADERS" ];       then echo "remove_bcc_headers $SMTP_REMOVE_BCC_HEADERS" >> /etc/msmtprc; fi
