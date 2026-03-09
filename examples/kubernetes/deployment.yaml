@@ -41,10 +41,6 @@ spec:
               env:
               - name: TZ
                 value: Europe/Paris
-              - name: PUID
-                value: "1500"
-              - name: PGID
-                value: "1500"
               - name: SMTP_HOST
                 value: "smtp.gmail.com"
               - name: SMTP_PORT
