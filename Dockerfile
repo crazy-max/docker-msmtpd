@@ -25,15 +25,10 @@ RUN <<EOT
   file /usr/bin/msmtpd
 EOT
 
-FROM crazymax/alpine-s6:${ALPINE_VERSION}-2.2.0.3
-
-ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2" \
-  TZ="UTC" \
-  PUID="1500" \
-  PGID="1500"
+FROM alpine:${ALPINE_VERSION}
+ENV TZ=UTC
 
 RUN apk --update --no-cache add \
-    bash \
     ca-certificates \
     gettext \
     gnutls \
@@ -44,14 +39,19 @@ RUN apk --update --no-cache add \
     shadow \
     tzdata \
   && ln -sf /usr/bin/msmtp /usr/sbin/sendmail \
-  && addgroup -g ${PGID} msmtpd \
-  && adduser -D -H -u ${PUID} -G msmtpd -s /bin/sh msmtpd \
-  && rm -rf /tmp/*
+  && addgroup -g 1500 msmtpd \
+  && adduser -D -H -u 1500 -G msmtpd -s /bin/sh msmtpd \
+  && touch /etc/msmtprc \
+  && chown msmtpd:msmtpd /etc/msmtprc
 
 COPY --from=builder /usr/bin/msmtp* /usr/bin/
 COPY rootfs /
 
 EXPOSE 2500
+
+USER msmtpd
+
+CMD ["sh", "/entrypoint.sh"]
 
 HEALTHCHECK --interval=10s --timeout=5s \
   CMD echo EHLO localhost | nc 127.0.0.1 2500 | grep 250 || exit 1

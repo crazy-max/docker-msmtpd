@@ -10,8 +10,6 @@ services:
         protocol: tcp
     environment:
       - "TZ=Europe/Paris"
-      - "PUID=1500"
-      - "PGID=1500"
       - "SMTP_HOST=smtp.gmail.com"
       - "SMTP_PORT=587"
       - "SMTP_TLS=on"
