@@ -7,6 +7,6 @@ cat > /etc/services.d/msmtpd/run <<EOL
 with-contenv
 s6-setuidgid ${PUID}:${PGID}
 
-msmtpd --interface=0.0.0.0 --port=${LISTEN_PORT} --command="/usr/bin/msmtp -f %F"
+msmtpd --interface=0.0.0.0 --port=${LISTEN_PORT} --tls=${LISTEN_TLS} --command="/usr/bin/msmtp -f %F"
 EOL
 chmod +x /etc/services.d/msmtpd/run

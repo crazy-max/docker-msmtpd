@@ -81,6 +81,10 @@ linux/s390x
 * `PUID`: Daemon user id (default `1500`)
 * `PGID`: Daemon group id (default `1500`)
 * `LISTEN_PORT`: Port for the msmtpd process to listen on - Default is `2500`
+<<<<<<< HEAD
+=======
+* `LISTEN_TLS`: Whether TLS should be used when communicating with the relay. `on` or `off` - Default is `off`
+>>>>>>> 35ab2d028318420579c284cd83623d7d4e55e865
 * `SMTP_HOST`: SMTP relay server to send the mail to. **required**
 * `SMTP_PORT`: Port that the SMTP relay server listens on. Default `25` or `465` if TLS.
 * `SMTP_TLS`: Enable or disable TLS (also known as SSL) for secured connections (`on` or `off`).

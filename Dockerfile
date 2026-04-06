@@ -31,7 +31,8 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2" \
   TZ="UTC" \
   PUID="1500" \
   PGID="1500" \
-  LISTEN_PORT="2500"
+  LISTEN_PORT="2500" \
+  LISTEN_TLS="off"
 
 RUN apk --update --no-cache add \
     bash \
