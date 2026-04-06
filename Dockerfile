@@ -55,4 +55,4 @@ COPY rootfs /
 EXPOSE 2500
 
 HEALTHCHECK --interval=10s --timeout=5s \
-  CMD echo EHLO localhost | nc 127.0.0.1 2500 | grep 250 || exit 1
+  CMD echo EHLO localhost | nc 127.0.0.1 ${LISTEN_PORT} | grep 250 || exit 1
