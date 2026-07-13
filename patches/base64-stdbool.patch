@@ -1,0 +1,32 @@
+From cd297e5936372adfa27d3cdf0895ebd22e26f75a Mon Sep 17 00:00:00 2001
+From: Roman Bogorodskiy <bogorodskiy@gmail.com>
+Date: Sun, 12 Jul 2026 08:44:17 +0200
+Subject: [PATCH] Fix base64 build on FreeBSD
+
+On FreeBSD with clang 21 build fails with:
+
+In file included from smtp.c:42:
+./base64.h:45:8: error: unknown type name 'bool'
+   45 | extern bool base64_decode_ctx (struct base64_decode_context *ctx,
+      |        ^
+
+This happens because commit 4d710b4f8d09c3879bd0582cb61372168898f413
+removed 'include <stdbool.h>' from base64.h. Add it back to make it
+compile again.
+
+Upstream: https://github.com/marlam/msmtp/commit/cd297e5936372adfa27d3cdf0895ebd22e26f75a
+---
+ src/base64.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/base64.h b/src/base64.h
+--- a/src/base64.h
++++ b/src/base64.h
+@@ -18,6 +18,7 @@
+ #ifndef BASE64_H
+ #define BASE64_H
+ 
++#include <stdbool.h>
+ #include <stddef.h>
+ typedef size_t idx_t;
+ 
