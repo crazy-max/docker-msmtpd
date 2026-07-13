@@ -12,7 +12,8 @@ ARG MSMTP_VERSION
 WORKDIR /src
 RUN curl -sSL "https://marlam.de/msmtp/releases/msmtp-$MSMTP_VERSION.tar.xz" | tar xJv --strip 1
 COPY patches /patches
-RUN patch -p1 < /patches/base64-stdbool.patch
+RUN patch -p1 < /patches/base64-stdbool.patch \
+  && patch -p1 < /patches/msmtpd-reap-children.patch
 
 FROM base AS builder
 ARG TARGETPLATFORM
@@ -56,4 +57,4 @@ COPY rootfs /
 EXPOSE 2500
 
 HEALTHCHECK --interval=10s --timeout=5s \
-  CMD echo EHLO localhost | nc 127.0.0.1 2500 | grep 250 || exit 1
+  CMD printf 'EHLO localhost\r\nQUIT\r\n' | nc -w 2 127.0.0.1 2500 | grep -q '^250' || exit 1
