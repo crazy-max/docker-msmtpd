@@ -54,6 +54,18 @@ jobs:
           log_check: "[services.d] done"
           timeout: 120
       -
+        name: Check container health
+        run: |
+          for i in $(seq 1 60); do
+            status=$(docker inspect --format "{{.State.Health.Status}}" "$CONTAINER_NAME")
+            if [ "$status" = "healthy" ]; then
+              exit 0
+            fi
+            sleep 2
+          done
+          docker inspect --format "{{json .State.Health}}" "$CONTAINER_NAME"
+          exit 1
+      -
         name: Logs
         if: always()
         run: |
