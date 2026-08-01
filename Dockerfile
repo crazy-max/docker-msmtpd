@@ -55,4 +55,4 @@ COPY rootfs /
 EXPOSE 2500
 
 HEALTHCHECK --interval=10s --timeout=5s \
-  CMD printf 'EHLO localhost\r\nQUIT\r\n' | nc -w 2 127.0.0.1 "$LISTEN_PORT" | grep -q '^250' || exit 1
+  CMD netstat -ltn | grep -q ":${LISTEN_PORT}[[:space:]].*LISTEN" || exit 1
