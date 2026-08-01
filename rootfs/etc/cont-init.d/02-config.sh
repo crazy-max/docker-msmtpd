@@ -13,6 +13,7 @@ TZ=${TZ:-UTC}
 #SMTP_PASSWORD=${SMTP_PASSWORD:-bar}
 #SMTP_DOMAIN=${SMTP_DOMAIN:-example.com}
 #SMTP_FROM=${SMTP_FROM:-foo@example.com}
+#SMTP_FROM_FULL_NAME=${SMTP_FROM_FULL_NAME:-Foo Bar}
 #SMTP_SET_FROM_HEADER=${SMTP_SET_FROM_HEADER:-auto}
 #SMTP_SET_DATE_HEADER=${SMTP_SET_DATE_HEADER:-auto}
 #SMTP_REMOVE_BCC_HEADERS=${SMTP_REMOVE_BCC_HEADERS:-on}
@@ -71,6 +72,7 @@ if [ -n "$SMTP_USER" ];                     then echo "user $SMTP_USER" >> /etc/
 if [ -n "$SMTP_PASSWORD" ];                 then echo "password $SMTP_PASSWORD" >> /etc/msmtprc; fi
 if [ -n "$SMTP_DOMAIN" ];                   then echo "domain $SMTP_DOMAIN" >> /etc/msmtprc; fi
 if [ -n "$SMTP_FROM" ];                     then echo "from $SMTP_FROM" >> /etc/msmtprc; fi
+if [ -n "$SMTP_FROM_FULL_NAME" ];           then echo "from_full_name $SMTP_FROM_FULL_NAME" >> /etc/msmtprc; fi
 if [ -n "$SMTP_ALLOW_FROM_OVERRIDE" ];      then echo "allow_from_override $SMTP_ALLOW_FROM_OVERRIDE" >> /etc/msmtprc; fi
 if [ -n "$SMTP_SET_FROM_HEADER" ];          then echo "set_from_header $SMTP_SET_FROM_HEADER" >> /etc/msmtprc; fi
 if [ -n "$SMTP_SET_DATE_HEADER" ];          then echo "set_date_header $SMTP_SET_DATE_HEADER" >> /etc/msmtprc; fi
