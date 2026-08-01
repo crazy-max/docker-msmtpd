@@ -30,7 +30,8 @@ FROM crazymax/alpine-s6:${ALPINE_VERSION}-2.2.0.3
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2" \
   TZ="UTC" \
   PUID="1500" \
-  PGID="1500"
+  PGID="1500" \
+  LISTEN_PORT="2500"
 
 RUN apk --update --no-cache add \
     bash \
@@ -54,4 +55,4 @@ COPY rootfs /
 EXPOSE 2500
 
 HEALTHCHECK --interval=10s --timeout=5s \
-  CMD printf 'EHLO localhost\r\nQUIT\r\n' | nc -w 2 127.0.0.1 2500 | grep -q '^250' || exit 1
+  CMD printf 'EHLO localhost\r\nQUIT\r\n' | nc -w 2 127.0.0.1 "$LISTEN_PORT" | grep -q '^250' || exit 1

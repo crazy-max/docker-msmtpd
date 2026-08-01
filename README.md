@@ -79,6 +79,7 @@ linux/s390x
 * `TZ`: Timezone assigned to the container (default `UTC`)
 * `PUID`: Daemon user id (default `1500`)
 * `PGID`: Daemon group id (default `1500`)
+* `LISTEN_PORT`: Container listen port for msmtpd, useful with host, macvlan, or ipvlan networking (default `2500`)
 * `SMTP_HOST`: SMTP relay server to send the mail to. **required**
 * `SMTP_PORT`: Port that the SMTP relay server listens on. Default `25` or `465` if TLS.
 * `SMTP_TLS`: Enable or disable TLS (also known as SSL) for secured connections (`on` or `off`).
@@ -107,7 +108,7 @@ linux/s390x
 
 ## Ports
 
-* `2500`: SMTP relay port
+* `2500`: SMTP relay port, configurable through `LISTEN_PORT`
 
 ## Usage
 
