@@ -1,19 +1,16 @@
 # syntax=docker/dockerfile:1
 
-ARG MSMTP_VERSION=1.8.33
+ARG MSMTP_VERSION=1.8.34
 ARG ALPINE_VERSION=3.24
 ARG XX_VERSION=1.9.0
 
 FROM --platform=$BUILDPLATFORM tonistiigi/xx:${XX_VERSION} AS xx
 FROM --platform=$BUILDPLATFORM alpine:${ALPINE_VERSION} AS base
 COPY --from=xx / /
-RUN apk --update --no-cache add clang curl file lld make musl-dev patch pkgconfig tar xz
+RUN apk --update --no-cache add clang curl file lld make musl-dev pkgconfig tar xz
 ARG MSMTP_VERSION
 WORKDIR /src
 RUN curl -sSL "https://marlam.de/msmtp/releases/msmtp-$MSMTP_VERSION.tar.xz" | tar xJv --strip 1
-COPY patches /patches
-RUN patch -p1 < /patches/base64-stdbool.patch \
-  && patch -p1 < /patches/msmtpd-reap-children.patch
 
 FROM base AS builder
 ARG TARGETPLATFORM
