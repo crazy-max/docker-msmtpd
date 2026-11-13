@@ -33,7 +33,8 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2" \
   PGID="1500" \
   LISTEN_PORT="2500"
 
-RUN apk --update --no-cache add \
+RUN apk --update --no-cache upgrade \
+  && apk --no-cache add \
     bash \
     ca-certificates \
     gettext \
