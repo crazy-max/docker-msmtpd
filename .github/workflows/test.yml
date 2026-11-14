@@ -51,7 +51,7 @@ jobs:
         uses: crazy-max/.github/.github/actions/container-logs-check@46267a6e61cd56aac2fc79943df180152f4c89d6 # v1.10.1
         with:
           name: ${{ env.CONTAINER_NAME }}
-          log_check: "[services.d] done"
+          log_check: "service msmtpd successfully started"
           timeout: 120
       -
         name: Check container health
@@ -65,6 +65,14 @@ jobs:
           done
           docker inspect --format "{{json .State.Health}}" "$CONTAINER_NAME"
           exit 1
+      -
+        name: Check native service and SMTP
+        run: |
+          docker compose exec -T msmtpd bash -s < smtp.sh
+        working-directory: test
+        env:
+          MSMTPD_IMAGE: ${{ env.BUILD_TAG }}
+          MSMTPD_CONTAINER: ${{ env.CONTAINER_NAME }}
       -
         name: Logs
         if: always()

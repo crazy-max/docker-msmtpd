@@ -1,0 +1,4 @@
+#!/command/with-contenv sh
+
+exec s6-setuidgid "${PUID}:${PGID}" msmtpd --interface=0.0.0.0 \
+  --port="${LISTEN_PORT}" --log=/proc/self/fd/2 --command="/usr/bin/msmtp -f %F"
