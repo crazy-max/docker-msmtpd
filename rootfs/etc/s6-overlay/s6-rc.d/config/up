@@ -1,0 +1,4 @@
+with-contenv
+if { /etc/s6-overlay/scripts/fix-logs }
+if { /etc/s6-overlay/scripts/fix-uidgid }
+/etc/s6-overlay/scripts/config

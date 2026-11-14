@@ -10,7 +10,11 @@ COPY --from=xx / /
 RUN apk --update --no-cache add clang curl file lld make musl-dev pkgconfig tar xz
 ARG MSMTP_VERSION
 WORKDIR /src
-RUN curl -sSL "https://marlam.de/msmtp/releases/msmtp-$MSMTP_VERSION.tar.xz" | tar xJv --strip 1
+RUN <<EOT
+  set -ex
+  curl -fsSL --retry 5 --retry-all-errors --connect-timeout 20 --max-time 120 -o /tmp/msmtp.tar.xz "https://marlam.de/msmtp/releases/msmtp-$MSMTP_VERSION.tar.xz"
+  tar xJvf /tmp/msmtp.tar.xz --strip 1
+EOT
 
 FROM base AS builder
 ARG TARGETPLATFORM
@@ -25,7 +29,7 @@ RUN <<EOT
   file /usr/bin/msmtpd
 EOT
 
-FROM crazymax/alpine-s6:${ALPINE_VERSION}-2.2.0.3
+FROM alpine:${ALPINE_VERSION}
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2" \
   TZ="UTC" \
@@ -42,6 +46,7 @@ RUN apk --update --no-cache add \
     libgsasl \
     libsecret \
     mailx \
+    s6-overlay \
     shadow \
     tzdata \
   && ln -sf /usr/bin/msmtp /usr/sbin/sendmail \
@@ -53,6 +58,8 @@ COPY --from=builder /usr/bin/msmtp* /usr/bin/
 COPY rootfs /
 
 EXPOSE 2500
+
+ENTRYPOINT [ "/init" ]
 
 HEALTHCHECK --interval=10s --timeout=5s \
   CMD netstat -ltn | grep -q ":${LISTEN_PORT}[[:space:]].*LISTEN" || exit 1
