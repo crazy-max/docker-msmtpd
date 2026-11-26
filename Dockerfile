@@ -1,7 +1,10 @@
 # syntax=docker/dockerfile:1
 
+# renovate: datasource=github-tags depName=marlam/msmtp
 ARG MSMTP_VERSION=1.8.34
+# renovate: datasource=docker depName=alpine versioning=docker
 ARG ALPINE_VERSION=3.24
+# renovate: datasource=docker depName=tonistiigi/xx versioning=docker
 ARG XX_VERSION=1.9.0
 
 FROM --platform=$BUILDPLATFORM tonistiigi/xx:${XX_VERSION} AS xx
